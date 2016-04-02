@@ -4,21 +4,18 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 
 public class ReceiverThread extends Thread {
-    private Map<String, Long> hosts = new HashMap<String, Long>();
+
+    private Map<String, Long> hosts = new HashMap<>();
 
     @Override
     public void run() {
         try {
-            MulticastSocket socket = new MulticastSocket(Config.port);
-            socket.joinGroup(InetAddress.getByName(Config.group));
+            MulticastSocket socket = new MulticastSocket(Config.MULTICAST_PORT);
+            socket.joinGroup(InetAddress.getByName(Config.MULTICAST_GROUP));
             
             while (!isInterrupted()) {
                 byte buf[] = new byte[1024];
@@ -32,7 +29,7 @@ public class ReceiverThread extends Thread {
                 System.out.println(getAvailableHosts());
             }
             
-            socket.leaveGroup(InetAddress.getByName(Config.group));
+            socket.leaveGroup(InetAddress.getByName(Config.MULTICAST_GROUP));
             socket.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -40,7 +37,7 @@ public class ReceiverThread extends Thread {
     }
 
     private Set<String> getAvailableHosts() {
-        List<String> hostsToRemove = new ArrayList<String>();
+        List<String> hostsToRemove = new ArrayList<>();
         for (Entry<String, Long> entry : hosts.entrySet()) {
             long entryAge = System.currentTimeMillis() - entry.getValue();
             if (entryAge > 10000) {
