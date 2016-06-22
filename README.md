@@ -31,7 +31,7 @@ docker run --rm -v "$PWD":/usr/src/myapp -w /usr/src/myapp java:7 java -jar targ
 
 # more info
 
-http://ecolabardini.blogspot.com.br/2015/12/playing-with-multicast-groups-in-java.html
+http://ecolabardini.github.io/2015/12/01/playing-with-multicast-groups-in-java
 
 # license
 
